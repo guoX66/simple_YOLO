@@ -5,7 +5,7 @@ import sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 from ultralytics import YOLO
-from yolo_config import Y_cfg, train_yaml, curpath,args
+from yolo_config import Y_cfg, train_yaml, curpath, args
 from utils import make_yaml
 
 if __name__ == '__main__':
@@ -13,10 +13,8 @@ if __name__ == '__main__':
     model = YOLO(Y_cfg['model'])
     # 训练模型
     output_file = Y_cfg['out_file']
-    try:
-        shutil.rmtree(f'runs/detect/{output_file}')
-    except:
-        pass
+    shutil.rmtree(os.path.join(curpath, f'runs/detect/{output_file}'), ignore_errors=True)
+
     results = model.train(name=output_file,
                           data=Y_cfg['train_data'],
                           epochs=Y_cfg['epochs'],

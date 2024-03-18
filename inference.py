@@ -15,5 +15,5 @@ if __name__ == '__main__':
     parser.add_argument('--task', type=str, default='detect', choices=('detect', 'segment'), help='task')
     parser.add_argument('--source', type=str, default='inference')
     args = parser.parse_args()
-    model = YOLO(f'runs/{args.task}/{args.model}/weights/best.pt')
+    model = YOLO(os.path.join(current_dir, f'runs/{args.task}/{args.model}/weights/best.pt'))
     result = model(args.source, save=True, conf=args.conf)
