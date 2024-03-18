@@ -1,0 +1,15 @@
+!*/
+/runs/
+/train_process/
+/log/
+**/__pycache__/
+**/.idea/
+*.jpg
+*.png
+*.jpeg
+*.txt
+*.xml
+*.cache
+*.pt
+*.pth
+!requirements.txt
