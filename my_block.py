@@ -15,8 +15,6 @@ def resnext50_encoder(path='pretrain_weights/resnext50_32x4d_a1h-0146ab0a.pth'):
     f_dir = os.path.dirname(current_dir)
     path = os.path.join(f_dir, path)
     if os.path.exists(path):
-        base_dir = os.path.dirname(f_dir)
-        path = os.path.join(base_dir, path)
         m = timm.create_model('resnext50_32x4d', pretrained=False).default_cfg
         m['file'] = path
         model = timm.models.resnext50_32x4d(pretrained=True, pretrained_cfg=m, features_only=True)
