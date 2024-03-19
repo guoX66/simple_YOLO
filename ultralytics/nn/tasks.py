@@ -6,7 +6,7 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-from my_block import DecoderBlock, cho_output, resnext50_encoder, CBAM
+from my_block import DecoderBlock, cho_output, resnext50_encoder, CBAM,EMA
 
 from ultralytics.nn.modules import (
     AIFI,
@@ -919,7 +919,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             t = m
             m = resnext50_encoder()
             c2 = m.feature_info.channels()
-        elif m in {CBAM}:
+        elif m in {CBAM,EMA}:
             c1, c2 = ch[f], args[0]
             if c2 != nc:
                 c2 = make_divisible(min(c2, max_channels) * width, 8)

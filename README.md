@@ -70,11 +70,11 @@ https://ai.baidu.com/easydata/app/dataset/list
 
 ### 
 
-# **三、  Adding blocks
+# **III. Adding blocks
 
 ### Add blocks to my_block.py and modify parse_model function in ultralytics/nn/tasks accordingly
 
-### Resnext50_32x4d, CBAM、EMA have been added to this project
+### resnext50_32x4d, CBAM、EMA have been added to this project
 
 ### resnext50_32x4d reference：[guoX66/YoloPlusPlus (github.com)](https://github.com/guoX66/YoloPlusPlus)
 
