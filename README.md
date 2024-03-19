@@ -8,7 +8,7 @@
 
 # Ⅰ. Environment deployment
 
-### First install python>=3.10.2，然后安装torch ,torchaudio ，torchvision
+### First install python>=3.10.2
 
 ### On a device with nvidia services, run the following command line to see the cuda version
 
