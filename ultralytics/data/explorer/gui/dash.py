@@ -207,10 +207,10 @@ def layout():
     with col1:
         subcol1, subcol2, subcol3, subcol4, subcol5 = st.columns(5)
         with subcol1:
-            st.write("Max Images Displayed:")
+            st.write("Max images Displayed:")
         with subcol2:
             num = st.number_input(
-                "Max Images Displayed",
+                "Max images Displayed",
                 min_value=0,
                 max_value=total_imgs,
                 value=min(500, total_imgs),

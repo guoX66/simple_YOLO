@@ -91,7 +91,7 @@ python model_test.py --model models/CBAM1_yolov8n.yaml
 ### After the dataset made as Step 2 has been saved to data/xml_data, run the following command to perform label conversion:
 
 ```bash
-python voc2txt.py 
+python voc2txt.py --ini_path data/xml_data --out_path data/datasets --file mytrain
 ```
 
 ### **If you have a prepared dataset, put the unsplit dataset named i_datasets, and the split dataset named datasets in the data folder with the tag semantic pair set in class.yaml
@@ -99,13 +99,13 @@ python voc2txt.py
 ### To split dataset
 
 ```bash
-python divide.py --divide_rate 8:2
+python divide.py --val_rate 0.2 --data data/datasets 
 ```
 
 ### Run training
 
 ```bash
-python train.py --model models/yolov8n.yaml --epochs 50 --batch 10 --imgsz 640
+python train.py --file mytrain --model models/yolov8n.yaml --epochs 50 --batch 10 --imgsz 640 
 ```
 
 ### When running out of memory, retrain with a smaller batch size
@@ -113,7 +113,7 @@ python train.py --model models/yolov8n.yaml --epochs 50 --batch 10 --imgsz 640
 ### To enable mixed-precision amp training, run the following command (some versions of cuda will prevent the training process from being recorded, so turn off amp)
 
 ```bash
-python train.py --model models/yolov8n.yaml --epochs 50 --batch 10 --imgsz 640 --amp True
+python train.py --file mytrain --model models/yolov8n.yaml --epochs 50 --batch 10 --imgsz 640 --amp True
 ```
 
 
@@ -123,7 +123,9 @@ python train.py --model models/yolov8n.yaml --epochs 50 --batch 10 --imgsz 640 -
 ### Put the image you want to detect into your inference file and run the following command to detect it
 
 ```bash
-python inference.py --task detect --model yolov8n --conf 0.3
+python inference.py --file mytrain --train_file train --source inference --conf 0.3 
 ```
 
 ### The training and detection results are stored in the runs folder
+
+

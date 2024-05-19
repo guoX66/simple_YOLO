@@ -49,9 +49,9 @@ def make_yaml(curpath, train_yaml, class_yaml='class.yaml'):
         class_dict = yaml.load(f.read(), Loader=yaml.FullLoader)
     class_dict = {int(i): class_dict[i] for i in class_dict.keys()}
     desired_caps = {
-        'path': f'{curpath}/data/datasets',  # dataset root dir
-        'train': 'train/images',
-        'val': 'val/images',
+        'path': f'{curpath}/data/i_datasets',  # dataset root dir
+        'train': 'train.txt',
+        'val': 'val.txt',
         # Classes
         'names': class_dict
     }

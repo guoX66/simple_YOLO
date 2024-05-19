@@ -57,7 +57,7 @@ class SegmentationValidator(DetectionValidator):
         """Return a formatted description of evaluation metrics."""
         return ("%22s" + "%11s" * 10) % (
             "Class",
-            "Images",
+            "images",
             "Instances",
             "Box(P",
             "R",

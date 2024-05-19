@@ -1,64 +1,52 @@
-import os
+import argparse
 import random
-import shutil
 import os
 import sys
+from tqdm import tqdm
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
-from yolo_config import Y_cfg
+parser = argparse.ArgumentParser()
+parser.add_argument('--val_rate', type=float, default=0.1)
+parser.add_argument('--data', type=str, default='data/swine/datasets')
+args = parser.parse_args()
 
 
-def divide_dataset(path, o_path, train_p, val_p):
+def divide_dataset(i_path, val_p):
     print('正在拆分数据集......')
-    shutil.rmtree(o_path, ignore_errors=True)
-    train_path_i = os.path.join(o_path, 'train', 'images')
-    train_path_l = os.path.join(o_path, 'train', 'labels')
-    val_path_i = os.path.join(o_path, 'val', 'images')
-    val_path_l = os.path.join(o_path, 'val', 'labels')
-
-
-    os.makedirs(train_path_i)
-    os.makedirs(train_path_l)
-    os.makedirs(val_path_i)
-    os.makedirs(val_path_l)
-
-    image_dir = os.path.join(path, 'images')
-    txt_dir = os.path.join(path, 'labels')
+    image_dir = os.path.join(i_path, 'images')
+    txt_dir = os.path.join(i_path, 'labels')
     dir_list = list(os.listdir(image_dir))
-    true_list = []
-    background_list = []
+    file_list = []
     for filename in dir_list:
-        txt_filename = f'{os.path.splitext(filename)[0]}.txt'
-        img_path = os.path.join(image_dir, filename)
-        txt_path = os.path.join(txt_dir, txt_filename)
+        file, ext = os.path.splitext(filename)
+        txt_path = os.path.join(txt_dir, file + '.txt')
         if not os.path.exists(txt_path):
-            background_list.append(filename)
-            shutil.copy(img_path, train_path_i)
+            print(f'Warning:{filename}的标签文件不存在，已忽略！')
         else:
-            true_list.append(filename)
-
-    n = len(true_list)
-    random.shuffle(true_list)
-    train_list = true_list[:int(n * train_p / 10)]
-    val_list = true_list[int(n * train_p / 10):]
-
-    for filename in train_list:
-        txt_filename = f'{os.path.splitext(filename)[0]}.txt'
-        txt_path = os.path.join(txt_dir, txt_filename)
-        img_path = os.path.join(image_dir, filename)
-        shutil.copy(img_path, train_path_i)
-        shutil.copy(txt_path, train_path_l)
-
-    for filename in val_list:
-        txt_filename = f'{os.path.splitext(filename)[0]}.txt'
-        txt_path = os.path.join(txt_dir, txt_filename)
-        img_path = os.path.join(image_dir, filename)
-        shutil.copy(img_path, val_path_i)
-        shutil.copy(txt_path, val_path_l)
-    print('拆分完毕！')
+            file_list.append(filename)
+    if val_p > 0:
+        train_list = []
+        val_list = []
+        n = len(file_list)
+        random.shuffle(file_list)
+        train_num = n - int(n * val_p)
+        for count, path in tqdm(enumerate(file_list)):
+            if count < train_num:
+                tmp_path = os.path.join(image_dir, path)
+                train_list.append(tmp_path)
+            else:
+                tmp_path = os.path.join(image_dir, path)
+                val_list.append(tmp_path)
+        train_txt_path = os.path.join(i_path, 'train.txt')
+        val_txt_path = os.path.join(i_path, 'val.txt')
+        with open(train_txt_path, 'w') as f:
+            for path in train_list:
+                f.write(path + '\n')
+        with open(val_txt_path, 'w') as f:
+            for path in val_list:
+                f.write(path + '\n')
 
 
 if __name__ == '__main__':
-    t, v = int(Y_cfg['train_divide'][0]), int(Y_cfg['train_divide'][2])
-    divide_dataset(Y_cfg['divide_in'], Y_cfg['divide_out'], t, v)
+    divide_dataset(args.data, args.val_rate)

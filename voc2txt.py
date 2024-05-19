@@ -1,14 +1,23 @@
+import argparse
 import json
 import os
 import shutil
 import time
 import xml.etree.ElementTree as ET
 import yaml
-from divide import divide_dataset
 from utils import bar, get_image_size
 
 class_dict = {}
 class_list = []
+parser = argparse.ArgumentParser()
+parser.add_argument('--file', default='mytrain')
+parser.add_argument('--ini_path', default='data/xml_data')
+parser.add_argument('--out_path', default='data/datasets')
+parser.add_argument('--model', type=str, default="yolov8n.pt")
+args = parser.parse_args()
+dirStr, ext = os.path.splitext(args.model)
+file = dirStr.split("/")[-1]
+file = args.file if args.file else file
 
 
 def convert_coordinates(size, box):
@@ -97,12 +106,12 @@ def convert_voc_to_yolov5(xml_dir, txt_dir, image_dir, out_path):
 
 
 def change_label_main():
-    from yolo_config import Y_cfg
-    ini_path = Y_cfg['xml_path']
+    ini_path = args.ini_path
+    dataset_path = args.out_path
     xml_dir = f'{ini_path}/Annotations'
     txt_dir = f'{ini_path}/labels'
     image_dir = f'{ini_path}/Images'
-    dataset_path = Y_cfg['divide_in']
+
     shutil.rmtree(dataset_path, ignore_errors=True)
     shutil.rmtree(txt_dir, ignore_errors=True)
     os.makedirs(dataset_path)
@@ -116,6 +125,7 @@ def change_label_main():
 
 if __name__ == '__main__':
     change_label_main()
-    path = 'data/class_id'
-    with open('class.yaml', "w", encoding="utf-8") as f:
+    curpath = os.path.dirname(os.path.realpath(__file__))
+    os.makedirs(f'runs/{file}', exist_ok=True)
+    with open(f'runs/{file}/class.yaml', "w", encoding="utf-8") as f:
         yaml.dump(class_dict, f)

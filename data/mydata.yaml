@@ -1,5 +1,5 @@
 names:
   0: worm
-path: D:\github_projects\simple_YOLO/data/datasets
-train: train/images
-val: val/images
+path: D:\github_projects\simple_YOLO/data/i_datasets
+train: train.txt
+val: val.txt

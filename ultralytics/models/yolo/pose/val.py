@@ -49,7 +49,7 @@ class PoseValidator(DetectionValidator):
         """Returns description of evaluation metrics in string format."""
         return ("%22s" + "%11s" * 10) % (
             "Class",
-            "Images",
+            "images",
             "Instances",
             "Box(P",
             "R",
