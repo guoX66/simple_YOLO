@@ -2,13 +2,12 @@ import argparse
 import random
 import os
 import sys
-from tqdm import tqdm
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 parser = argparse.ArgumentParser()
-parser.add_argument('--val_rate', type=float, default=0.1)
-parser.add_argument('--data', type=str, default='data/swine/datasets')
+parser.add_argument('--val_rate', type=float, default=0.2)
+parser.add_argument('--data', type=str, default='data/datasets')
 args = parser.parse_args()
 
 
@@ -28,24 +27,32 @@ def divide_dataset(i_path, val_p):
     if val_p > 0:
         train_list = []
         val_list = []
+        train_val_list = []
         n = len(file_list)
         random.shuffle(file_list)
         train_num = n - int(n * val_p)
-        for count, path in tqdm(enumerate(file_list)):
+        for count, path in enumerate(file_list):
             if count < train_num:
                 tmp_path = os.path.join(image_dir, path)
                 train_list.append(tmp_path)
             else:
                 tmp_path = os.path.join(image_dir, path)
                 val_list.append(tmp_path)
+            train_val_list.append(tmp_path)
         train_txt_path = os.path.join(i_path, 'train.txt')
         val_txt_path = os.path.join(i_path, 'val.txt')
+        trainval_txt_path = os.path.join(i_path, 'trainval.txt')
         with open(train_txt_path, 'w') as f:
             for path in train_list:
                 f.write(path + '\n')
         with open(val_txt_path, 'w') as f:
             for path in val_list:
                 f.write(path + '\n')
+        with open(trainval_txt_path, 'w') as f:
+            for path in train_val_list:
+                f.write(path + '\n')
+        print('拆分数据集完毕！')
+
 
 
 if __name__ == '__main__':
