@@ -54,6 +54,7 @@ def my_move(datadir, trainlistdir, traindir):
             shutil.copy(traindata, traindir)
         COUNT += 1
         bar('coco数据移动/清洗', COUNT, len(file_names), t1)
+    print()
     # 同上
 
 

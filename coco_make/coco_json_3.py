@@ -77,7 +77,7 @@ class tococo(object):
             img_id = img_id + 1
             COUNT += 1
             bar('coco数据整合', COUNT, len(self.jpgpaths), t1)
-
+        print()
         self.coco["images"] = self.images
         self.categories.append(self.get_categories(label['class'], self.class_ids[label['class']]))
         self.coco["categories"] = self.categories
