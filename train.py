@@ -4,14 +4,14 @@ import os
 import sys
 import yaml
 
-from yolo_config import my_YOLO
+from yolo_config import my_YOLO, YOLO
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default="yolov8n.pt")
 parser.add_argument('--data', type=str, default='data/datasets')
 parser.add_argument('--file', default='mytrain')
 parser.add_argument('--epochs', type=int, default=50)
-parser.add_argument('--batch', type=int, default=2)
+parser.add_argument('--batch', type=int, default=50)
 parser.add_argument('--imgsz', type=int, default=640)
 parser.add_argument('--amp', type=bool, default=True)
 parser.add_argument('--num_workers', type=int, default=0)
@@ -67,3 +67,13 @@ if __name__ == '__main__':
     model = my_Train(args)
     model.make_yaml()
     model.start_train()
+    shutil.copy(f'{model.cur_path}/runs/{model.file}/train.yaml', f'{model.model.trainer.save_dir}/train.yaml')
+    if os.path.exists(f'{model.cur_path}/runs/{model.file}/class.json'):
+        shutil.copy(f'{model.cur_path}/runs/{model.file}/class.json', f'{model.model.trainer.save_dir}/class.json')
+    if os.path.exists(f'{model.cur_path}/data/datasets/models_files'):
+        shutil.copytree(f'{model.cur_path}/data/datasets/models_files', f'{model.model.trainer.save_dir}/models_files')
+    shutil.copy(f'{model.cur_path}/runs/{model.file}/class.yaml', f'{model.model.trainer.save_dir}/class.yaml')
+
+    best_path = f'{model.model.trainer.save_dir}/weights/best.pt'
+    best_model = YOLO(best_path)
+    best_model.export(format='onnx', opset=11)
