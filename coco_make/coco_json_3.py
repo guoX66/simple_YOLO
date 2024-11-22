@@ -8,9 +8,11 @@ import os
 import yaml
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--class_file', default=None)
 parser.add_argument('--file', default='mytrain')
 args = parser.parse_args()
 file = args.file
+class_file = args.class_file
 
 # 现有的标注文件地址
 label_path = '../data/datasets/json_labels/'
@@ -18,7 +20,7 @@ label_path = '../data/datasets/json_labels/'
 save_path = '../data/datasets/annotations'
 os.makedirs(save_path, exist_ok=True)
 
-class_yaml = f'../runs/{file}/class.yaml'
+class_yaml = class_file if (class_file is not None) else f'../runs/{file}/class.yaml'
 with open(class_yaml, 'r', encoding='UTF-8') as f:
     class_dict = yaml.load(f.read(), Loader=yaml.FullLoader)
 class_dict = {class_dict[i]: i + 1 for i in class_dict.keys()}
