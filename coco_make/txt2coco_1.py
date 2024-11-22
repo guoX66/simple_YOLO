@@ -27,7 +27,7 @@ def get_image_size(image_path):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--class_file', default='../runs/mytrain/class.yaml')
+parser.add_argument('--class_file', default='./class.yaml')
 parser.add_argument('--data_path', default='../data/datasets')
 args = parser.parse_args()
 
@@ -127,3 +127,14 @@ def change_label_main():
 
 if __name__ == '__main__':
     change_label_main()
+    labels = list(class_dict.values())
+    labels = ['None'] + labels
+    detection_threshold = 0.5
+    max_boxes = 200
+    js = {
+        "detection_threshold": detection_threshold,
+        "max_boxes": max_boxes,
+        "labels": labels,
+    }
+    with open(f'class.json', "w", encoding="utf-8") as f:
+        json.dump(js, f)
